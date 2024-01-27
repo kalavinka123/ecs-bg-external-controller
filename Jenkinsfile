@@ -6,6 +6,7 @@ pipeline {
     parameters {
         string(name: 'awsProfile', defaultValue: 'cicd', description: 'The AWS profile name to resolve credentials.')
         string(name: 'awsAccountNumber', defaultValue: '', description: 'The AWS account number to use.')
+        string(name: 'awsRegion', defaultValue: '', description: 'The AWS region.')
     }
     environment { 
         AWS_PROFILE = "${params.awsProfile}"
