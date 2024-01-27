@@ -10,6 +10,7 @@ pipeline {
     environment { 
         AWS_PROFILE = "${params.awsProfile}"
         AWS_ACCOUNT_NUMBER = "${params.awsAccountNumber}"
+        AWS_REGION = "${params.awsRegion}"
     }
     stages {
         stage('Build') {
@@ -22,7 +23,7 @@ pipeline {
                 script {
                     readProperties(file: 'Makefile.env').each { key, value -> env[key] = value }
                 }
-                sh '$(aws ecr get-login --no-include-email --registry-ids $AWS_ACCOUNT_NUMBER)'
+                sh '$(aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_NUMBER.dkr.ecr.$AWS_REGION.amazonaws.com)'
                 script {
                     def PUSH_RESULT = sh (
                     script: "make push-image",
