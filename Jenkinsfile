@@ -7,11 +7,13 @@ pipeline {
         string(name: 'awsProfile', defaultValue: 'cicd', description: 'The AWS profile name to resolve credentials.')
         string(name: 'awsAccountNumber', defaultValue: '', description: 'The AWS account number to use.')
         string(name: 'awsRegion', defaultValue: '', description: 'The AWS region.')
+        string(name: 'nextEnv', defaultValue: '', description: 'Next env.')
     }
     environment { 
         AWS_PROFILE = "${params.awsProfile}"
         AWS_ACCOUNT_NUMBER = "${params.awsAccountNumber}"
         AWS_REGION = "${params.awsRegion}"
+        NEXT_ENV = "${params.nextEnv}"
     }
     stages {
         stage('Build') {
@@ -78,7 +80,7 @@ pipeline {
 
                     def templateFile = env.TEMPLATE_BASE_PATH +'/' + TASK_DEF_TEMPLATE
                     def taskFamily = 'family'
-                    if ( env.NEXT_ENV == 'Green'){
+                    if ( $NEXT_ENV == 'Green'){
                         taskFamily = env.GREEN_TASK_FAMILY_PREFIX
                     }
                     else {
@@ -118,7 +120,7 @@ pipeline {
                     def targetGroupArn = 'tg'
                     def registerTaskDefOutputFile = env.TEMPLATE_BASE_PATH + '/' + env.REGISTER_TASK_DEF_OUTPUT
 
-                    if ( env.NEXT_ENV == 'Green' ){
+                    if ( $NEXT_ENV == 'Green' ){
                         taskFamily = env.GREEN_TASK_FAMILY_PREFIX
                         targetGroupArn = env.GREEN_TARGET_GROUP_ARN
                     }
@@ -160,7 +162,7 @@ pipeline {
                 script{
                     def blueTG = null
                     def greenTG = null
-                    if ( env.NEXT_ENV == 'Green' ){
+                    if ( $NEXT_ENV == 'Green' ){
                         blueTG = ["Weight": 0, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
                         greenTG = ["Weight": 100, "TargetGroupArn": env.GREEN_TARGET_GROUP_ARN]
                     }
@@ -215,7 +217,7 @@ pipeline {
                     def liveGreenWeight = null
                     def testBlueWeight = null
                     def testGreenWeight = null
-                    if ( env.NEXT_ENV == 'Green' ){
+                    if ( $NEXT_ENV == 'Green' ){
                         liveBlueWeight = ["Weight": 0, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
                         liveGreenWeight = ["Weight": 100, "TargetGroupArn": env.GREEN_TARGET_GROUP_ARN]
                         testBlueWeight = ["Weight": 100, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
