@@ -80,7 +80,7 @@ pipeline {
 
                     def templateFile = env.TEMPLATE_BASE_PATH +'/' + TASK_DEF_TEMPLATE
                     def taskFamily = 'family'
-                    if ( $NEXT_ENV == 'Green'){
+                    if ( env.NEXT_ENV == 'Green'){
                         taskFamily = env.GREEN_TASK_FAMILY_PREFIX
                     }
                     else {
@@ -120,7 +120,7 @@ pipeline {
                     def targetGroupArn = 'tg'
                     def registerTaskDefOutputFile = env.TEMPLATE_BASE_PATH + '/' + env.REGISTER_TASK_DEF_OUTPUT
 
-                    if ( $NEXT_ENV == 'Green' ){
+                    if ( env.NEXT_ENV == 'Green' ){
                         taskFamily = env.GREEN_TASK_FAMILY_PREFIX
                         targetGroupArn = env.GREEN_TARGET_GROUP_ARN
                     }
@@ -162,7 +162,7 @@ pipeline {
                 script{
                     def blueTG = null
                     def greenTG = null
-                    if ( $NEXT_ENV == 'Green' ){
+                    if ( env.NEXT_ENV == 'Green' ){
                         blueTG = ["Weight": 0, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
                         greenTG = ["Weight": 100, "TargetGroupArn": env.GREEN_TARGET_GROUP_ARN]
                     }
@@ -217,7 +217,7 @@ pipeline {
                     def liveGreenWeight = null
                     def testBlueWeight = null
                     def testGreenWeight = null
-                    if ( $NEXT_ENV == 'Green' ){
+                    if ( env.NEXT_ENV == 'Green' ){
                         liveBlueWeight = ["Weight": 0, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
                         liveGreenWeight = ["Weight": 100, "TargetGroupArn": env.GREEN_TARGET_GROUP_ARN]
                         testBlueWeight = ["Weight": 100, "TargetGroupArn": env.BLUE_TARGET_GROUP_ARN]
