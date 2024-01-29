@@ -30,5 +30,8 @@
     ],
     "cpu": "256",
     "memory": "512",
+    "runtimePlatform": {
+        "cpuArchitecture": "ARM64",
+    },
     "inferenceAccelerators": []
 }
